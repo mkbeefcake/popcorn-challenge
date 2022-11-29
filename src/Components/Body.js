@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react'
+import { useContractContext } from '../web3/ContractProvider';
 import { fetchTokens, smartContractAddress } from '../web3/useContract';
 
 function Body() {
 
+  const [, ethersProvider] = useContractContext();
+
 	useEffect(() => {
 
-    // fetchTokens();
+    if (ethersProvider)
+      fetchTokens(ethersProvider);
     		
-	}, [])
+	}, [ethersProvider])
 
   return (
     <div className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">

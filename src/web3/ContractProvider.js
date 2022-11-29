@@ -1,15 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Web3Modal from 'web3modal'
 
-const ContractContext = React.createContext({
-	web3Modal: null,
-	mainContract: null,
-});
+const ContractContext = React.createContext();
 
 const useContractContext = () => useContext(ContractContext);
 
 function ContractProvider({children}) {
 	const [web3Modal, setWeb3Modal] = useState(null)
+	const [ethersProvider, setEthersProvider] = useState(null)
 
 	useEffect(() => {
 		const newWeb3Modal = new Web3Modal({
@@ -19,7 +17,11 @@ function ContractProvider({children}) {
 		setWeb3Modal(newWeb3Modal);
 	}, [])
 
-	return <ContractContext.Provider value={[web3Modal]} >{children}</ContractContext.Provider>
+	const setProvider = (provider) => {
+		setEthersProvider(provider)
+	}
+
+	return <ContractContext.Provider value={[web3Modal, ethersProvider, setProvider]} >{children}</ContractContext.Provider>
 }
 
 export {ContractProvider, useContractContext}

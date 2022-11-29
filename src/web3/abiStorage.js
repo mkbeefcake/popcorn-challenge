@@ -58,5 +58,13 @@ export const getCachedAbi = async (address) => {
   if (!abi) {
     abi = await addAbiToCache(address);
   }
+
+  /* remove gas field for view */
+  abi = abi.map((item) => {
+    if (item.stateMutability && item.stateMutability == 'view' && item.gas)
+      item.gas = undefined
+    return item
+  })
+
   return abi;
 };

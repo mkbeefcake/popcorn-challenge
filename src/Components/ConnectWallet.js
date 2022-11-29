@@ -7,23 +7,25 @@ import { useContractContext } from '../web3/ContractProvider';
 function ConnectWallet() {
 
 	const [address, setAddress] = useState("")
-	const [web3Modal] = useContractContext();
+	const [network, setNetwork] = useState("")
+	const [web3Modal,,setProvider] = useContractContext();
 
 	async function connectWallet() {
-		debugger;
 		const provider = await web3Modal.connect();
 
 		addListeners(provider);
 		
 		const ethersProvider = new ethers.providers.Web3Provider(provider);
 		const userAddress = await ethersProvider.getSigner().getAddress();
+		setNetwork(await ethersProvider.getNetwork())
 		setAddress(userAddress);
-	
+		setProvider(ethersProvider)
 	}
 
 	async function disconnectWallet() {
-		web3Modal.clearCachedProvider();
+		await web3Modal.clearCachedProvider();
 		setAddress("");
+		setProvider(null);
 	}
 
 	async function addListeners(web3ModalProvider) {
@@ -55,6 +57,7 @@ function ConnectWallet() {
 				</button>
 			}
 			<p className='pt-2'><b>User address :</b> {address}</p>
+			<p className='pt-2'><b>Network :</b> {JSON.stringify(network)}</p>
 		</div>
 	)
 
