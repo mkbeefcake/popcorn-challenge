@@ -6,6 +6,14 @@ function VaultPair({value, index}) {
 
 	console.log({value, index});
 
+  async function deposit() {
+    console.log('deposite')
+  }
+
+  async function withdrawal() {
+    console.log('withdrawal')
+  }
+
 	return (
     <div className="accordion-item border-t-0 border-l-0 border-r-0 rounded-none bg-white border border-gray-200">
       <div className="accordion-title mb-0" onClick={() => setIsActive(!isActive)}>
@@ -28,6 +36,20 @@ function VaultPair({value, index}) {
           <p>PricePerShare : {value.pricePerShare.toString()}</p>        
           <p>TokenAddress : {value.tokenAddress.toString()}</p>        
           </i>
+          <div className="justify-center flex space-x-2 mt-4">
+            <button 
+              onClick={deposit}
+              type="button" 
+              className="px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+                Deposite
+            </button>
+            <button 
+              onClick={withdrawal}
+              type="button" 
+              className="px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+                Withdrawal
+            </button>
+          </div>
         </div>
       </div>}
     </div>
