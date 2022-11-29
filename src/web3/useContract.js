@@ -22,6 +22,29 @@ export async function fetchTokens(provider) {
 	return vaultPairs;
 }
 
+async function getTokenInfo(provider, tokenAddress) {
+	try {
+		const abi = await getCachedAbi(tokenAddress);	
+		const vaultContract = new ethers.Contract(tokenAddress, abi, provider.getSigner());
+		const name = await vaultContract.name();
+		const symbol = await vaultContract.symbol();
+
+		return {
+			tokenAddress: tokenAddress,
+			name: name,
+			symbol: symbol
+		}
+	}
+	catch (err) {
+		return {
+			tokenAddress: tokenAddress,
+			name: "",
+			symbol: "",
+			err: err
+		}
+	}
+}
+
 async function getVaultInfo(provider, vaultAddress) {
 
 	try {
@@ -34,6 +57,8 @@ async function getVaultInfo(provider, vaultAddress) {
 		const totalSupply = await vaultContract.totalSupply();
 		const pricePerShare = await vaultContract.pricePerShare();
 		const tokenAddress = await vaultContract.token();
+		const token = await getTokenInfo(provider, tokenAddress);
+
 		return {
 			address: vaultAddress,
 			name: name,
@@ -42,7 +67,7 @@ async function getVaultInfo(provider, vaultAddress) {
 			totalAssets: totalAssets,
 			totalSupply: totalSupply,
 			pricePerShare: pricePerShare,
-			tokenAddress: tokenAddress
+			token: token
 		}
 	}
 	catch(err) {
@@ -55,7 +80,11 @@ async function getVaultInfo(provider, vaultAddress) {
 			totalAssets: "",
 			totalSupply: "",
 			pricePerShare: "",
-			tokenAddress: ""
+			token: {
+				tokenAddress: "",
+				name: "",
+				symbol: ""
+			}
 		}
 	}
 }

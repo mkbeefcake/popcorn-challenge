@@ -1,17 +1,23 @@
 import { useState } from "react"
+import DepositeModal from "./Modal/DepositeModal";
+import useDepositeModal from "./Modal/useDepositeModal";
+import useWithdrawalModal from "./Modal/useWithdrawalModal";
+import WithdrawalModal from "./Modal/WithdrawalModal";
 import './VaultPair.css';
 
 function VaultPair({value, index}) {
 	const [isActive, setIsActive] = useState(false);
+  const {isDepositeShowing, toggleDeposite} = useDepositeModal();
+  const {isWithdrawShowing, toggleWithdraw} = useWithdrawalModal();
 
 	console.log({value, index});
 
   async function deposit() {
-    console.log('deposite')
+    toggleDeposite();
   }
 
   async function withdrawal() {
-    console.log('withdrawal')
+    toggleWithdraw();
   }
 
 	return (
@@ -34,7 +40,9 @@ function VaultPair({value, index}) {
           <p>totalAssets : {value.totalAssets.toString()}</p>
           <p>totalSupply : {value.totalSupply.toString()}</p>
           <p>PricePerShare : {value.pricePerShare.toString()}</p>        
-          <p>TokenAddress : {value.tokenAddress.toString()}</p>        
+          <p>TokenAddress : {value.token.tokenAddress.toString()}</p>        
+          <p>Token Name : {value.token.name.toString()}</p>        
+          <p>Token Symbol : {value.token.symbol.toString()}</p>        
           </i>
           <div className="justify-center flex space-x-2 mt-4">
             <button 
@@ -52,6 +60,8 @@ function VaultPair({value, index}) {
           </div>
         </div>
       </div>}
+      <DepositeModal isShowing={isDepositeShowing} hide={toggleDeposite} value={value} ></DepositeModal>
+      <WithdrawalModal isShowing={isWithdrawShowing} hide={toggleWithdraw} value={value}></WithdrawalModal>
     </div>
 	)
 }

@@ -38,7 +38,7 @@ function Body() {
             <div className='spinner'></div>
           </div>
         ) : (
-          <div class="accordion accordion-flush">
+          <div className="accordion accordion-flush">
           {vaultPairs.map((vault, index)=> (
             <VaultPair value={vault} index={index}></VaultPair>
           ))}
