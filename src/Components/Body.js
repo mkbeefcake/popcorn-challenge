@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useContractContext } from '../web3/ContractProvider';
 import { fetchTokens, smartContractAddress } from '../web3/useContract';
 
 function Body() {
-
+  const [vaultPairs, setVaultPairs] = useState([]);
   const [, ethersProvider] = useContractContext();
 
 	useEffect(() => {
 
-    if (ethersProvider)
-      fetchTokens(ethersProvider);
+    const fetchData = async() => {
+
+      if (ethersProvider) {
+        const _pairs = await fetchTokens(ethersProvider);
+        setVaultPairs(_pairs);
+      }  
+    }
+
+    fetchData().catch(console.error);
     		
 	}, [ethersProvider])
 
