@@ -1,24 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+
+import Header from './Components/Header';
+import Body from './Components/Body';
+import { ContractProvider } from './web3/ContractProvider';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContractProvider>
+      <div className="bg-blue-300 min-w-screen min-h-screen overflow-x-hidden">
+        <Header></Header>
+        <Body></Body>
+      </div>
+    </ContractProvider>
   );
 }
 
