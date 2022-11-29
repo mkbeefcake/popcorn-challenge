@@ -16,7 +16,6 @@ export async function fetchTokens(provider) {
 	for ( let i=0; i<numRelease; i++) {
 		const vaultAddress = await mainContract.releases(i)
 		const vaultInfo = await getVaultInfo(provider, vaultAddress)
-		console.log(`vaultInfo = ${JSON.stringify(vaultInfo)}`)
 		vaultPairs.push(vaultInfo)
 	}
 
@@ -31,7 +30,7 @@ async function getVaultInfo(provider, vaultAddress) {
 		const name = await vaultContract.name();
 		const symbol = await vaultContract.symbol();
 		const decimals = await vaultContract.decimals();
-		// const totalAssets = await vaultContract.totalAssets();
+		const totalAssets = await vaultContract.totalAssets();
 		const totalSupply = await vaultContract.totalSupply();
 		const pricePerShare = await vaultContract.pricePerShare();
 
@@ -40,7 +39,7 @@ async function getVaultInfo(provider, vaultAddress) {
 			name: name,
 			symbol: symbol,
 			decimals: decimals,
-			// totalAssets: totalAssets,
+			totalAssets: totalAssets,
 			totalSupply: totalSupply,
 			pricePerShare: pricePerShare
 		}
@@ -48,7 +47,13 @@ async function getVaultInfo(provider, vaultAddress) {
 	catch(err) {
 		return {
 			address: vaultAddress,
-			err: err
+			err: err,
+			name: "",
+			symbol: "",
+			decimals: "",
+			totalAssets: "",
+			totalSupply: "",
+			pricePerShare: ""
 		}
 	}
 }

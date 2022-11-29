@@ -25,6 +25,7 @@ function ConnectWallet() {
 	async function disconnectWallet() {
 		await web3Modal.clearCachedProvider();
 		setAddress("");
+		setNetwork("");
 		setProvider(null);
 	}
 
@@ -56,8 +57,8 @@ function ConnectWallet() {
 						Disconnect
 				</button>
 			}
-			<p className='pt-2'><b>User address :</b> {address}</p>
-			<p className='pt-2'><b>Network :</b> {JSON.stringify(network)}</p>
+			<p className='pt-2'><b>User address :</b> <i>{address}</i></p>
+			<p className='pt-2'><b>Network :</b> <i>{JSON.stringify(network)}</i></p>
 		</div>
 	)
 
