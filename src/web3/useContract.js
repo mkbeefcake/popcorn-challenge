@@ -33,7 +33,7 @@ async function getVaultInfo(provider, vaultAddress) {
 		const totalAssets = await vaultContract.totalAssets();
 		const totalSupply = await vaultContract.totalSupply();
 		const pricePerShare = await vaultContract.pricePerShare();
-
+		const tokenAddress = await vaultContract.token();
 		return {
 			address: vaultAddress,
 			name: name,
@@ -41,7 +41,8 @@ async function getVaultInfo(provider, vaultAddress) {
 			decimals: decimals,
 			totalAssets: totalAssets,
 			totalSupply: totalSupply,
-			pricePerShare: pricePerShare
+			pricePerShare: pricePerShare,
+			tokenAddress: tokenAddress
 		}
 	}
 	catch(err) {
@@ -53,7 +54,8 @@ async function getVaultInfo(provider, vaultAddress) {
 			decimals: "",
 			totalAssets: "",
 			totalSupply: "",
-			pricePerShare: ""
+			pricePerShare: "",
+			tokenAddress: ""
 		}
 	}
 }

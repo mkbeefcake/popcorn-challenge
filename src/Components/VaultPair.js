@@ -26,6 +26,7 @@ function VaultPair({value, index}) {
           <p>totalAssets : {value.totalAssets.toString()}</p>
           <p>totalSupply : {value.totalSupply.toString()}</p>
           <p>PricePerShare : {value.pricePerShare.toString()}</p>        
+          <p>TokenAddress : {value.tokenAddress.toString()}</p>        
           </i>
         </div>
       </div>}
