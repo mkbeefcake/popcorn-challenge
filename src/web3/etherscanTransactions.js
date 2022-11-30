@@ -20,11 +20,11 @@ export async function fetchToken_v2(provider) {
 	const transactions = await getTransactionList();
 	const newExperimentTransactions = 
 			transactions
-				.filter(tr => tr.methodId == "0x5b73aa0d")
+				.filter(tr => tr.methodId == "0x5b73aa0d" || tr.methodId == "0x5bd4b0f2")
 				.map(tr => {
 					const decoded = decoder.decodeData(tr.input)
-					if (decoded.inputs[5] == undefined || decoded.inputs[5] == '')
-						return undefined;
+					// if (decoded.inputs[5] == undefined || decoded.inputs[5] == '')
+					// 	return undefined;
 
 					return {
 						token : {
@@ -35,8 +35,10 @@ export async function fetchToken_v2(provider) {
 						rewards: "0x" + decoded.inputs[3],
 						name: decoded.inputs[4],
 						symbol: decoded.inputs[5],
+						hash: tr.hash,
 					}
 				})
 				.filter(tr => tr != undefined);
+	console.log(`Count of newExperimentTransactions = ${newExperimentTransactions.length}`);
 	return newExperimentTransactions;
 }

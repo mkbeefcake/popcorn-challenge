@@ -27,6 +27,8 @@ function VaultPair_v2({value, index}) {
     if (vaultPair.token && vaultPair.token.tokenAddress) {
       const info = await getDetailFromTokenAddress(ethersProvider, vaultPair.token.tokenAddress);
       const newVaultPair = {...vaultPair, vault : info.vault, token: info.token};
+      newVaultPair.name = newVaultPair.vault.name;
+      newVaultPair.symbol = newVaultPair.vault.symbol;
       setVaultPair(newVaultPair);
       setIsMore(true);
     }
@@ -38,7 +40,7 @@ function VaultPair_v2({value, index}) {
         <div>
           <b>Name: </b>
           <i>
-            {vaultPair.name && vaultPair.name.toString()}
+            {vaultPair.name ? vaultPair.name.toString() : (vaultPair.vault && vaultPair.vault.name) }
           </i>
         </div>
         <div>{isActive ? '-' : '+'}</div>
@@ -46,7 +48,8 @@ function VaultPair_v2({value, index}) {
       {isActive && 
       <div className="accordion-content">
         <div><i>
-          <p>Symbol : {vaultPair.symbol && vaultPair.symbol.toString()}</p>
+          <p>Symbol : {vaultPair.symbol ? vaultPair.symbol.toString() : (vaultPair.vault && vaultPair.vault.symbol)}</p>
+          <p>TxHash : {vaultPair.hash && vaultPair.hash.toString()}</p>
           <p>TokenAddress : {vaultPair.token && vaultPair.token.tokenAddress && vaultPair.token.tokenAddress.toString()}</p>
           <p>Governance : {vaultPair.governance && vaultPair.governance.toString()}</p>
           <p>Guardian : {vaultPair.guardian && vaultPair.guardian.toString()}</p>
