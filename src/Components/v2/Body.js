@@ -1,13 +1,13 @@
 import { FieldArray, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react'
-import { useContractContext } from '../web3/ContractProvider';
-import { fetchTokens, smartContractAddress } from '../web3/useContract';
-import VaultPair from './VaultPair';
+import { useContractContext } from '../../web3/ContractProvider';
+import { smartContractAddress } from '../../web3/useContract';
 
 import './Body.css';
-import { fetchToken_v2 } from '../web3/etherscanTransactions';
+import { fetchToken_v2 } from '../../web3/etherscanTransactions';
+import VaultPair_v2 from './VaultPair';
 
-function Body() {
+function Body_v2() {
   const [vaultPairs, setVaultPairs] = useState([]);
   const [, ethersProvider] = useContractContext();
   const [loading, setLoading] = useState(false);
@@ -18,8 +18,8 @@ function Body() {
 
       if (ethersProvider) {
         setLoading(true);
-        const _pairs = await fetchTokens(ethersProvider);        
-        setVaultPairs(_pairs);
+        const vaultPairs = await fetchToken_v2(ethersProvider);
+        setVaultPairs(vaultPairs);
         setLoading(false);
       }  
     }
@@ -41,7 +41,7 @@ function Body() {
         ) : (
           <div className="accordion accordion-flush">
           {vaultPairs.map((vault, index)=> (
-            <VaultPair value={vault} index={index}></VaultPair>
+            <VaultPair_v2 value={vault} index={index}></VaultPair_v2>
           ))}
         </div>
         )       
@@ -50,4 +50,4 @@ function Body() {
   )
 }
 
-export default Body
+export default Body_v2

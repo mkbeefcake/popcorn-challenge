@@ -1,8 +1,43 @@
 import { ethers } from "ethers";
 import { getCachedAbi } from "./abiStorage";
+import { BigNumber } from "bignumber.js";
 
 export const smartContractAddress = "0x50c1a2eA0a861A967D9d0FFE2AE4012c2E053804";
 
+export async function getBalance(provider, tokenAddress) {
+	try {
+		const abi = await getCachedAbi(tokenAddress);	
+		const tokenContract = new ethers.Contract(tokenAddress, abi, provider.getSigner());
+		const userAddress = await provider.getSigner().getAddress();
+		const tokenBalance = await tokenContract.balanceOf(userAddress);
+		const decimals = await tokenContract.decimals();
+		console.log(`tokenBalance = ${tokenBalance}, decimals = ${decimals}`);
+
+		const x = new BigNumber(tokenBalance);
+		const result = x.dividedBy(new BigNumber((10 ** decimals).toString()));
+		console.log(`result = ${result}`)		
+		return result;
+
+		// return tokenBalance.div(BigNumber.from((10 ** decimals).toString()));
+	}
+	catch(err) {
+		console.error(err)
+		return 0
+	}
+}
+
+export async function getDetailFromTokenAddress(provider, tokenAddress) {
+	const abi = await getCachedAbi(smartContractAddress);	
+	const mainContract = new ethers.Contract(smartContractAddress, abi, provider.getSigner());
+
+	const numVaults = await mainContract.numVaults(tokenAddress);
+	if (numVaults < 1) 
+		return {}
+	
+	const vaultAddress = await mainContract.vaults(tokenAddress, numVaults - 1);
+	const vaultInfo = await getVaultInfo(provider, vaultAddress);
+	return { vault: vaultInfo, token: vaultInfo.token};
+}
 
 export async function fetchTokens(provider) {
 	
@@ -60,6 +95,7 @@ async function getVaultInfo(provider, vaultAddress) {
 		const token = await getTokenInfo(provider, tokenAddress);
 
 		return {
+			vaultContract: vaultContract,
 			address: vaultAddress,
 			name: name,
 			symbol: symbol,
@@ -72,6 +108,7 @@ async function getVaultInfo(provider, vaultAddress) {
 	}
 	catch(err) {
 		return {
+			vaultContract: null,
 			address: vaultAddress,
 			err: err,
 			name: "",
