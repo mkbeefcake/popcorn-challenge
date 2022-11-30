@@ -59,8 +59,23 @@ export async function setDeposit(provider, vaultAddress, amount, decimals) {
 		const vaultContract = new ethers.Contract(vaultAddress, abi, provider.getSigner());
 		const calculatedAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals.toString()));		
 		console.log(`amount = ${amount}, decimals = ${decimals} calculatedAmount = ${calculatedAmount.toString()}`);
-		debugger;
 		await vaultContract["deposit(uint256)"](calculatedAmount.toString());
+		return true;
+	}
+	catch (err) {
+		console.log(err);
+		return false;
+	}
+}
+
+export async function setWithdraw(provider, vaultAddress, amount, decimals) {
+	try {
+		const abi = await getCachedAbi(vaultAddress);	
+		const userAddress = await provider.getSigner().getAddress();
+		const vaultContract = new ethers.Contract(vaultAddress, abi, provider.getSigner());
+		const calculatedAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals.toString()));		
+		console.log(`amount = ${amount}, decimals = ${decimals} calculatedAmount = ${calculatedAmount.toString()}`);
+		await vaultContract["withdraw(uint256)"](calculatedAmount.toString());
 		return true;
 	}
 	catch (err) {

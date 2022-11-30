@@ -46,12 +46,11 @@ const DepositeModal = ({ isShowing, hide, value }) => {
   }, [isShowing, refreshCount])
 
   async function onChangeDepositBalance(e) {
-    if (e.target.value > userBalance)
-      e.target.value = userBalance;
-     
+    const newBalance = (e.target.value > userBalance) ? userBalance : e.target.value;
+    
     const shareRatio = await getVaultShareRatio(ethersProvider, value.vault.address);
-    setEstimatedTokenBalance(e.target.value * shareRatio);
-    setDepositeBalance(e.target.value);
+    setEstimatedTokenBalance(newBalance * shareRatio);
+    setDepositeBalance(newBalance);
   };
 
   async function onSetAllowance() {
@@ -99,26 +98,26 @@ const DepositeModal = ({ isShowing, hide, value }) => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form class="bg-white rounded px-4 pt-4 pb-4 mb-4">
-              <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for={`user-balance`}>
+            <form className="bg-white rounded px-4 pt-4 pb-4 mb-4">
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`user-balance`}>
                   Current User's {value.token.symbol}
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id={`user-balance`} type="number" disabled value={userBalance}></input>
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol`}>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`token-symbol`}>
                   From {value.token.symbol}
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id={`token-symbol`} type="number" min={0} step="0.1" max={userBalance} onChange={onChangeDepositBalance}></input>
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol-target`}>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`token-symbol-target`}>
                   Estimated {value.symbol}
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id={`token-symbol-target`} disabled value={estimatedTokenBalance} type="number"></input>
               </div>
             </form>
