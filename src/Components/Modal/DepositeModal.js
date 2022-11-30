@@ -15,7 +15,7 @@ const DepositeModal = ({ isShowing, hide, value }) => {
 
       if (ethersProvider) {    
         const balance= await getBalance(ethersProvider, value.token.tokenAddress);
-        // console.log(`Token = ${value.token.tokenAddress} balance = ${balance}`);
+        console.log(`Token = ${value.token.tokenAddress} balance = ${balance}`);
         setUserBalance(balance);
       }  
     }
@@ -23,7 +23,7 @@ const DepositeModal = ({ isShowing, hide, value }) => {
     if (isShowing)
       fetchData().catch(console.error);
 
-  }, [])
+  }, [isShowing])
 
   return (
     isShowing ? ReactDOM.createPortal(

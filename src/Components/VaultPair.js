@@ -26,7 +26,7 @@ function VaultPair({value, index}) {
         <div>
           <b>Name: </b>
           <i>
-            {value.name ? value.name : "Error happened"}
+            {value.name ? value.name : ""}
           </i>
         </div>
         <div>{isActive ? '-' : '+'}</div>
@@ -35,11 +35,12 @@ function VaultPair({value, index}) {
       <div className="accordion-content">
         <div><i>
           <p>Symbol : {value.symbol}</p>
+          <p>Api Version : {value.apiVersion}</p>
           <p>Vault Contract Address : {value.address}</p>
           <p>Decimals : {value.decimals.toString()}</p>
           <p>totalAssets : {value.totalAssets.toString()}</p>
           <p>totalSupply : {value.totalSupply.toString()}</p>
-          <p>PricePerShare : {value.pricePerShare.toString()}</p>        
+          <p>PricePerShare : {value.pricePerShare.toString()}</p>
           <p>TokenAddress : {value.token.tokenAddress.toString()}</p>        
           <p>Token Name : {value.token.name.toString()}</p>        
           <p>Token Symbol : {value.token.symbol.toString()}</p>        

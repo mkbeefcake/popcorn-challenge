@@ -33,6 +33,9 @@ function Body_v2() {
       <p className="text-2xl text-gray-600 mb-5">
         <strong>Smart Contract Address (MainNet) :</strong> <i>{smartContractAddress}</i>
       </p>
+      <p className="text-2xl text-gray-600 mb-5">
+        <i>All Vaults</i>
+      </p>
       { 
         loading ? (
           <div className='loader-container'>

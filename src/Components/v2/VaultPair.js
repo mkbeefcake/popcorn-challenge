@@ -10,6 +10,7 @@ import { useContractContext } from '../../web3/ContractProvider';
 function VaultPair_v2({value, index}) {
 	const [isActive, setIsActive] = useState(false);
   const [vaultPair, setVaultPair] = useState(value);
+  const [isMore, setIsMore] = useState(false);
   const {isDepositeShowing, toggleDeposite} = useDepositeModal();
   const {isWithdrawShowing, toggleWithdraw} = useWithdrawalModal();
   const [, ethersProvider] = useContractContext();
@@ -26,8 +27,8 @@ function VaultPair_v2({value, index}) {
     if (vaultPair.token && vaultPair.token.tokenAddress) {
       const info = await getDetailFromTokenAddress(ethersProvider, vaultPair.token.tokenAddress);
       const newVaultPair = {...vaultPair, vault : info.vault, token: info.token};
-      debugger;
       setVaultPair(newVaultPair);
+      setIsMore(true);
     }
   }
 
@@ -51,6 +52,7 @@ function VaultPair_v2({value, index}) {
           <p>Guardian : {vaultPair.guardian && vaultPair.guardian.toString()}</p>
           <p>Rewards : {vaultPair.rewards && vaultPair.rewards.toString()}</p>
           <p>=================</p>
+          <p>Api Version : {vaultPair.vault && vaultPair.vault.apiVersion && vaultPair.vault.apiVersion.toString()}</p>
           <p>Vault Address : {vaultPair.vault && vaultPair.vault.address && vaultPair.vault.address.toString()}</p>
           <p>Decimals : {vaultPair.vault && vaultPair.vault.decimals && vaultPair.vault.decimals.toString()}</p>
           <p>totalAssets : {vaultPair.vault && vaultPair.vault.totalAssets && vaultPair.vault.totalAssets.toString()}</p>
@@ -64,7 +66,8 @@ function VaultPair_v2({value, index}) {
             <button 
               onClick={analyze}
               type="button" 
-              className="px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+              disabled={isMore}
+              className="disabled:opacity-25 px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                 More
             </button>
             <button 

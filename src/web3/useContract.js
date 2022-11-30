@@ -11,14 +11,12 @@ export async function getBalance(provider, tokenAddress) {
 		const userAddress = await provider.getSigner().getAddress();
 		const tokenBalance = await tokenContract.balanceOf(userAddress);
 		const decimals = await tokenContract.decimals();
-		console.log(`tokenBalance = ${tokenBalance}, decimals = ${decimals}`);
 
-		const x = new BigNumber(tokenBalance);
-		const result = x.dividedBy(new BigNumber((10 ** decimals).toString()));
-		console.log(`result = ${result}`)		
+		const a = new BigNumber(tokenBalance.toString());
+		const b = new BigNumber(10).pow(decimals);
+
+		const result = a.dividedBy(b);
 		return result;
-
-		// return tokenBalance.div(BigNumber.from((10 ** decimals).toString()));
 	}
 	catch(err) {
 		console.error(err)
@@ -36,6 +34,9 @@ export async function getDetailFromTokenAddress(provider, tokenAddress) {
 	
 	const vaultAddress = await mainContract.vaults(tokenAddress, numVaults - 1);
 	const vaultInfo = await getVaultInfo(provider, vaultAddress);
+	if (vaultInfo == undefined)
+		return { vault: {}, token: {} }
+
 	return { vault: vaultInfo, token: vaultInfo.token};
 }
 
@@ -54,7 +55,7 @@ export async function fetchTokens(provider) {
 		vaultPairs.push(vaultInfo)
 	}
 
-	return vaultPairs;
+	return vaultPairs.filter(valut => valut != undefined);
 }
 
 async function getTokenInfo(provider, tokenAddress) {
@@ -92,10 +93,12 @@ async function getVaultInfo(provider, vaultAddress) {
 		const totalSupply = await vaultContract.totalSupply();
 		const pricePerShare = await vaultContract.pricePerShare();
 		const tokenAddress = await vaultContract.token();
+		const apiVersion = await vaultContract.apiVersion();
 		const token = await getTokenInfo(provider, tokenAddress);
 
 		return {
 			vaultContract: vaultContract,
+			apiVersion: apiVersion,
 			address: vaultAddress,
 			name: name,
 			symbol: symbol,
@@ -107,22 +110,7 @@ async function getVaultInfo(provider, vaultAddress) {
 		}
 	}
 	catch(err) {
-		return {
-			vaultContract: null,
-			address: vaultAddress,
-			err: err,
-			name: "",
-			symbol: "",
-			decimals: "",
-			totalAssets: "",
-			totalSupply: "",
-			pricePerShare: "",
-			token: {
-				tokenAddress: "",
-				name: "",
-				symbol: ""
-			}
-		}
+		return undefined;
 	}
 }
 
