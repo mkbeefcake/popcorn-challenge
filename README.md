@@ -1,6 +1,16 @@
-# Getting Started with Create React App
+# Frontend Dev Assignment Popcor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The project should be build in react with ether.js or an ether.js compatible framework
+
+1. Check the yearn registry for all USDC vaults.(0x50c1a2eA0a861A967D9d0FFE2AE4012c2E053804)
+2. Display all of them with their TVL in $ and a deposit/ withdrawal interface
+3. Allow the user to connect their wallet.
+4. In the deposit/withdrawal interface show a users balance of either usdc or vault token (usdc in deposit, vaultToken in withdrawal)
+5. When a user inputs values for either deposit/withdrawal it should show the expected returned amount of vaultToken (on deposit) or assets (on withdrawal) based on the vaults pricePerShare
+6. When a user inputs values for either deposit/withdrawal it should check if the user has a sufficient allowance. If not, it should show an approval button.
+7. The approval button should approve the maximum possible amount of either usdc/vault token for this vault.
+8. If the approval is sufficient and the user didnt enter more tokens than they own it should either deposit or withdraw from the vault and update displayed balances.
+
 
 ## Available Scripts
 
@@ -20,51 +30,3 @@ Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
