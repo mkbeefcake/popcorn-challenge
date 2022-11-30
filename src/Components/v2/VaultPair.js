@@ -49,7 +49,6 @@ function VaultPair_v2({value, index}) {
       <div className="accordion-content">
         <div><i>
           <p>Symbol : {vaultPair.symbol ? vaultPair.symbol.toString() : (vaultPair.vault && vaultPair.vault.symbol)}</p>
-          <p>TxHash : {vaultPair.hash && vaultPair.hash.toString()}</p>
           <p>TokenAddress : {vaultPair.token && vaultPair.token.tokenAddress && vaultPair.token.tokenAddress.toString()}</p>
           <p>Governance : {vaultPair.governance && vaultPair.governance.toString()}</p>
           <p>Guardian : {vaultPair.guardian && vaultPair.guardian.toString()}</p>

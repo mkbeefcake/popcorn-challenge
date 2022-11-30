@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useContractContext } from '../../web3/ContractProvider';
-import { getBalance, getReadablePrice } from '../../web3/useContract';
+import { getBalance, getReadablePrice, getVaultShareRatio } from '../../web3/useContract';
 import './Modal.css';
 
 const DepositeModal = ({ isShowing, hide, value }) => {
@@ -30,20 +30,12 @@ const DepositeModal = ({ isShowing, hide, value }) => {
 
   }, [isShowing])
 
-  function onChangeDepositBalance(e) {
+  async function onChangeDepositBalance(e) {
     if (e.target.value > userBalance)
       e.target.value = userBalance;
-      
-    const pricePerShare = value.pricePerShare ? value.pricePerShare : (value.vault && value.vault.pricePerShare ? value.vault.pricePerShare: 0 );
-    const decimals = value.decimals ? value.decimals : (value.vault && value.vault.decimals? value.vault.decimals : 0);
-
-    if (pricePerShare == 0)
-      setEstimatedTokenBalance(e.target.value);
-    else {
-      const readablePricePerShare = getReadablePrice(pricePerShare, decimals);    
-      setEstimatedTokenBalance(e.target.value * readablePricePerShare);
-    }
-
+     
+    const shareRatio = await getVaultShareRatio(ethersProvider, value.vault.address);
+    setEstimatedTokenBalance(e.target.value * shareRatio);
     setDepositeBalance(e.target.value);
   };
 
@@ -67,18 +59,18 @@ const DepositeModal = ({ isShowing, hide, value }) => {
                     id={`user-balance`} type="number" disabled value={userBalance}></input>
               </div>
               <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol-${value.token.symbol}`}>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol`}>
                   From {value.token.symbol}
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id={`token-symbol-${value.token.symbol}`} type="number" value={depositeBalance} step="0.1" min="0.0" max={userBalance} onChange={onChangeDepositBalance} ></input>
+                    id={`token-symbol`} type="number" min={0} step="0.1" max={userBalance} onChange={onChangeDepositBalance}></input>
               </div>
               <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol-${value.symbol}`}>
-                  Estimated {value.symbol} (USDC * PricePerShare)
+                <label class="block text-gray-700 text-sm font-bold mb-2" for={`token-symbol-target`}>
+                  Estimated {value.symbol}
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id={`token-symbol-${value.symbol}`} disabled value={estimatedTokenBalance} type="number"></input>
+                    id={`token-symbol-target`} disabled value={estimatedTokenBalance} type="number"></input>
               </div>
             </form>
             <div className="justify-center flex space-x-2 mt-4">

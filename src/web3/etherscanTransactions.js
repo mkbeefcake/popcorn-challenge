@@ -39,6 +39,7 @@ export async function fetchToken_v2(provider) {
 					}
 				})
 				.filter(tr => tr != undefined);
+
 	console.log(`Count of newExperimentTransactions = ${newExperimentTransactions.length}`);
 	return newExperimentTransactions;
 }
