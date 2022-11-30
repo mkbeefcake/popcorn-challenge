@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { getReadablePrice } from "../web3/useContract";
 import DepositeModal from "./Modal/DepositeModal";
 import useDepositeModal from "./Modal/useDepositeModal";
 import useWithdrawalModal from "./Modal/useWithdrawalModal";
@@ -38,9 +39,9 @@ function VaultPair({value, index}) {
           <p>Api Version : {value.apiVersion}</p>
           <p>Vault Contract Address : {value.address}</p>
           <p>Decimals : {value.decimals.toString()}</p>
-          <p>totalAssets : {value.totalAssets.toString()}</p>
-          <p>totalSupply : {value.totalSupply.toString()}</p>
-          <p>PricePerShare : {value.pricePerShare.toString()}</p>
+          <p>totalAssets : { getReadablePrice(value.totalAssets.toString(), value.decimals.toString())}</p>
+          <p>totalSupply : { getReadablePrice(value.totalSupply.toString(), value.decimals.toString())}</p>
+          <p>PricePerShare : { getReadablePrice(value.pricePerShare.toString(), value.decimals.toString())}</p>
           <p>TokenAddress : {value.token.tokenAddress.toString()}</p>        
           <p>Token Name : {value.token.name.toString()}</p>        
           <p>Token Symbol : {value.token.symbol.toString()}</p>        

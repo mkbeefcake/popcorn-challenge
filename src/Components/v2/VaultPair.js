@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { getDetailFromTokenAddress } from "../../web3/useContract";
+import { getDetailFromTokenAddress, getReadablePrice } from "../../web3/useContract";
 import DepositeModal from "../Modal/DepositeModal";
 import useDepositeModal from "../Modal/useDepositeModal";
 import useWithdrawalModal from "../Modal/useWithdrawalModal";
@@ -55,9 +55,9 @@ function VaultPair_v2({value, index}) {
           <p>Api Version : {vaultPair.vault && vaultPair.vault.apiVersion && vaultPair.vault.apiVersion.toString()}</p>
           <p>Vault Address : {vaultPair.vault && vaultPair.vault.address && vaultPair.vault.address.toString()}</p>
           <p>Decimals : {vaultPair.vault && vaultPair.vault.decimals && vaultPair.vault.decimals.toString()}</p>
-          <p>totalAssets : {vaultPair.vault && vaultPair.vault.totalAssets && vaultPair.vault.totalAssets.toString()}</p>
-          <p>totalSupply : {vaultPair.vault && vaultPair.vault.totalSupply && vaultPair.vault.totalSupply.toString()}</p>
-          <p>pricePerShare : {vaultPair.vault && vaultPair.vault.pricePerShare && vaultPair.vault.pricePerShare.toString()}</p>
+          <p>totalAssets : {vaultPair.vault && vaultPair.vault.totalAssets && getReadablePrice(vaultPair.vault.totalAssets.toString(), vaultPair.vault.decimals.toString())}</p>
+          <p>totalSupply : {vaultPair.vault && vaultPair.vault.totalSupply && getReadablePrice(vaultPair.vault.totalSupply.toString(), vaultPair.vault.decimals.toString())}</p>
+          <p>pricePerShare : {vaultPair.vault && vaultPair.vault.pricePerShare && getReadablePrice(vaultPair.vault.pricePerShare.toString(), vaultPair.vault.decimals.toString())}</p>
           <p>=================</p>
           <p>Token name : {vaultPair.token && vaultPair.token.name && vaultPair.token.name.toString()}</p>
           <p>Token symbol : {vaultPair.token && vaultPair.token.symbol && vaultPair.token.symbol.toString()}</p>
@@ -67,19 +67,21 @@ function VaultPair_v2({value, index}) {
               onClick={analyze}
               type="button" 
               disabled={isMore}
-              className="disabled:opacity-25 px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+              className="disabled:opacity-25 px-6 flex-inital w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                 More
             </button>
             <button 
               onClick={deposit}
               type="button" 
-              className="px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+              disabled={!isMore}
+              className="disabled:opacity-25 px-6 flex-inital w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                 Deposite
             </button>
             <button 
               onClick={withdrawal}
               type="button" 
-              className="px-6 flex-intial w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
+              disabled={!isMore}
+              className="disabled:opacity-25 px-6 flex-inital w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                 Withdrawal
             </button>
           </div>
