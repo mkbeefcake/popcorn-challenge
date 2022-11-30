@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useContractContext } from '../../web3/ContractProvider';
-import { getBalance, getReadablePrice, getVaultShareRatio } from '../../web3/useContract';
+import { getAllowance, getBalance, getReadablePrice, getVaultShareRatio, setAllowance, setDeposit } from '../../web3/useContract';
 import './Modal.css';
 
 const DepositeModal = ({ isShowing, hide, value }) => {
@@ -11,24 +11,39 @@ const DepositeModal = ({ isShowing, hide, value }) => {
   const [depositeBalance, setDepositeBalance] = useState(0.0);
   const [estimatedTokenBalance, setEstimatedTokenBalance] = useState(0.0);
 
-  const [isApproval, setIsApproval] = useState(false);
-  const [isDeposite, setIsDeposite] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [allowDeposite, setAllowDeposite] = useState(false);
+  const [refreshCount, setRefreshCount] = useState(0);
 
   useEffect(() => {
 
     const fetchData = async() => {
 
       if (ethersProvider) {    
+
+        // get user's balance
         const balance= await getBalance(ethersProvider, value.token.tokenAddress);
         console.log(`Token = ${value.token.tokenAddress} balance = ${balance}`);
         setUserBalance(balance);
+
+        // get user's approval status
+        const allowance = await getAllowance(ethersProvider, value.token.tokenAddress, value.vault.address);
+        if (allowance > 0) {
+          setIsApproved(true);
+          setAllowDeposite(true);
+        }
+        else {
+          setIsApproved(false);
+          setAllowDeposite(false);
+        }
       }  
     }
 
-    if (isShowing)
-      fetchData().catch(console.error);
+    if (isShowing) {
+      fetchData().catch(console.error);      
+    }
 
-  }, [isShowing])
+  }, [isShowing, refreshCount])
 
   async function onChangeDepositBalance(e) {
     if (e.target.value > userBalance)
@@ -38,6 +53,40 @@ const DepositeModal = ({ isShowing, hide, value }) => {
     setEstimatedTokenBalance(e.target.value * shareRatio);
     setDepositeBalance(e.target.value);
   };
+
+  async function onSetAllowance() {
+    const allowed = await setAllowance(ethersProvider, value.token.tokenAddress, value.vault.address);
+    if (allowed == true) {
+      setIsApproved(true);
+      setAllowDeposite(true);
+    }
+    else {
+      setIsApproved(false);
+      setAllowDeposite(false);
+    }
+    setRefreshCount(refreshCount+1);
+  }
+
+  async function onSetDeposit() {
+    if (depositeBalance <= 0 ) {
+      alert('please input deposite balance bigger than ZERO');
+      return;
+    }
+
+    const decimals = value.decimals ? value.decimals : (value.vault && value.vault.decimals ? value.vault.decimals : 0);
+    if (decimals <= 0) {
+      alert('ERROR: Decimal is ZERO');
+      return;
+    }
+    const result = await setDeposit(ethersProvider, value.vault.address, depositeBalance, decimals);
+    if (result == true) {
+      setDepositeBalance(0);
+    }
+    else {
+      alert('ERROR: Failed to deposit');
+    }
+    setRefreshCount(refreshCount+1);
+  }
 
   return (
     isShowing ? ReactDOM.createPortal(
@@ -75,13 +124,15 @@ const DepositeModal = ({ isShowing, hide, value }) => {
             </form>
             <div className="justify-center flex space-x-2 mt-4">
               <button 
-                disabled={!isApproval}
+                onClick={onSetAllowance}
+                disabled={isApproved}
                 type="button" 
                 className="disabled:opacity-25 px-6 flex-inital w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                   Approval
               </button>
               <button 
-                disabled={!isDeposite}
+                onClick={onSetDeposit}
+                disabled={!(isApproved && allowDeposite)}
                 type="button" 
                 className="disabled:opacity-25 px-6 flex-inital w-40 py-2.5 bg-blue-600 text-white font-medium uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">					
                   Deposite

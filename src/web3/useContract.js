@@ -19,12 +19,53 @@ export async function getBalance(provider, tokenAddress) {
 		const userAddress = await provider.getSigner().getAddress();
 		const tokenBalance = await tokenContract.balanceOf(userAddress);
 		const decimals = await tokenContract.decimals();
-		console.log(`tokenBalance = ${tokenBalance}, decimals = ${decimals}`)
+		// console.log(`tokenBalance = ${tokenBalance}, decimals = ${decimals}`)
 		return getReadablePrice(tokenBalance, decimals);
 	}
 	catch(err) {
 		console.error(err)
 		return 0
+	}
+}
+
+export async function getAllowance(provider, tokenAddress, vaultAddress) {
+	try {
+		const tokenContract = new ethers.Contract(tokenAddress, erc20abi, provider.getSigner());
+		const userAddress = await provider.getSigner().getAddress();
+		const allowance = await tokenContract.allowance(userAddress, vaultAddress);
+		return allowance.toString();
+	}
+	catch(err) {
+		return -1;
+	}
+}
+
+export async function setAllowance(provider, tokenAddress, vaultAddress) {
+	try {
+		const tokenContract = new ethers.Contract(tokenAddress, erc20abi, provider.getSigner());
+		const userAddress = await provider.getSigner().getAddress();
+		await tokenContract.approve(vaultAddress, ethers.constants.MaxUint256);
+		return true;
+	}
+	catch(err) {
+		return false;
+	}
+}
+
+export async function setDeposit(provider, vaultAddress, amount, decimals) {
+	try {
+		const abi = await getCachedAbi(vaultAddress);	
+		const userAddress = await provider.getSigner().getAddress();
+		const vaultContract = new ethers.Contract(vaultAddress, abi, provider.getSigner());
+		const calculatedAmount = new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals.toString()));		
+		console.log(`amount = ${amount}, decimals = ${decimals} calculatedAmount = ${calculatedAmount.toString()}`);
+		debugger;
+		await vaultContract["deposit(uint256)"](calculatedAmount.toString());
+		return true;
+	}
+	catch (err) {
+		console.log(err);
+		return false;
 	}
 }
 
@@ -91,7 +132,7 @@ export async function fetchTokens(provider) {
 	const abi = await getCachedAbi(smartContractAddress);	
 	const mainContract = new ethers.Contract(smartContractAddress, abi, provider.getSigner());
 	const numRelease = await mainContract.numReleases();
-	console.log(`numRelease = ${numRelease}`)
+	// console.log(`numRelease = ${numRelease}`)
 
 	let vaultPairs = []
 	
